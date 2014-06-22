@@ -1,0 +1,55 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jun 17 09:24:44 2014
+
+@author: tobie
+"""
+!rm *.md
+!rm *.ipynb
+#get all the rst files
+rstlist = !ls *.rst
+
+#pandoc from rst to markdown
+for rstfile in rstlist:
+    fname = rstfile[ 0:rstfile.find('.')]+'.md'
+    !pandoc -s {rstfile} -o {fname}
+
+fileorder = [
+   'index.md',
+   'appetite.md',
+   'interpreter.md',
+   'introduction.md',
+   'controlflow.md',
+   'datastructures.md',
+   'modules.md',
+   'inputoutput.md',
+   'errors.md',
+   'classes.md',
+   'stdlib.md',
+   'stdlib2.md',
+   'whatnow.md',
+   'interactive.md',
+   'floatingpoint.md'
+   ]
+
+#create one big file
+
+def output( output ):
+    outfile = str(fileorder.index(output)) +'_' +output[ 0:output.find('.') ] + '.ipynb'
+    print outfile
+    !notedown {output} > {outfile}
+for f in fileorder:
+    output( f )
+    
+
+
+f = open('a_navigate.md', 'wb')
+#write markdown link text
+for i,link in enumerate(fileorder):
+    name = link[0:link.find('.')]
+    print name
+    f.writelines( '[' +  name + '](' + str(i)+'_'+name +'.ipynb) \n \n')
+f.close()
+
+
+!rm *.md
